@@ -35,7 +35,8 @@ function TileLayer(
 		baseURL,					//!< base URL for image tiles
 		tileWidth,
 		tileHeight,
-		fileExtension
+		fileExtension,
+    tileSourceType
 		)
 {
 	/**
@@ -101,6 +102,7 @@ function TileLayer(
 			
 			xd = fc - old_fc;
 			yd = fr - old_fr;
+
 			
 			// re-order the tiles array on demand
 			if ( xd < 0 )
@@ -199,7 +201,7 @@ function TileLayer(
 			for ( var j = 0; j < tiles[ 0 ].length; ++j )
 			{
 				var c = fc + j;
-				
+
 				/**
 				 * TODO Test if updating the URLs always was required to
 				 * guarantee homogeneous update speed for modulo-changing steps
@@ -215,8 +217,16 @@ function TileLayer(
 				{
 					// TODO: use this for the new tile naming scheme:
 					// tiles[ i ][ j ].alt = tileBaseName + stack.s + "/" + ( fr + i ) + "/" + ( fc + j );
-					tiles[ i ][ j ].alt = tileBaseName + r + "_" + c + "_" + zoom;
-					tiles[ i ][ j ].src = self.getTileURL( tiles[ i ][ j ].alt );
+          if( tileSourceType === 1 ) {
+            console.log('source type 1')
+            tiles[ i ][ j ].alt = tileBaseName + r + "_" + c + "_" + zoom;
+            tiles[ i ][ j ].src = self.getTileURLRequest( c * tileWidth, r * tileHeight, tileWidth, tileHeight, stack.scale, stack.z );
+          } else if ( tileSourceType === 2 ) {
+            console.log('source type 2')
+            tiles[ i ][ j ].alt = tileBaseName + r + "_" + c + "_" + zoom;
+            tiles[ i ][ j ].src = self.getTileURL( tiles[ i ][ j ].alt );
+          }
+
 				}
 				tiles[ i ][ j ].style.top = t + "px";
 				tiles[ i ][ j ].style.left = l + "px";
@@ -236,6 +246,20 @@ function TileLayer(
 		
 		return 2;
 	}
+
+	/**
+	 * Creates the URL for a tile in a generic way.
+   * To be used for instance for Volumina served datasources
+	 */
+  this.getTileURLRequest = function( x, y, dx, dy, scale, z ) {
+    return baseURL + "?" + $.param({
+        x: x,
+        y: y,
+        dx : tileWidth,
+        dy : tileHeight,
+        scale : scale, // defined as 1/2**zoomlevel
+        z : z});
+  }
 
 	/**
 	 * Creates the URL for a tile.

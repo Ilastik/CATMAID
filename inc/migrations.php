@@ -869,6 +869,14 @@ ALTER TABLE ONLY treenode
 '
 ),
 
+	'2012-02-15T14:32:05' => new Migration(
+		'Data source type specification. See data-model.lyx',
+		'
+ALTER TABLE stack ADD COLUMN tile_source_type integer NOT NULL DEFAULT 1;
+ALTER TABLE overlay ADD COLUMN tile_source_type integer NOT NULL DEFAULT 1;
+'
+),
+
 	// INSERT NEW MIGRATIONS HERE
 	// (Don't remove the previous line, or inserting migration templates
 	// won't work.)
