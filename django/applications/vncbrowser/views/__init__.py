@@ -24,6 +24,7 @@ from views import convert_annotations_to_networkx
 from views import stack_info
 
 from views import get_tile
+from views import push_image
 
 from catmaid_replacements import projects
 from catmaid_replacements import labels_all
