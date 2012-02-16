@@ -136,31 +136,23 @@ function Stack(
   }
 
   /*
-   * Get the top and left coordinates in pixel coordinates of
-   * stack's window
-   */
-  this.getWorldTopLeftPixel = function()
-  {
-    return {
-      worldTop : ( ( self.y - self.viewHeight / self.scale / 2 ) ),
-      worldLeft : ( ( self.x - self.viewWidth / self.scale / 2 ) ),
-      scale : self.scale
-    }
-  }
-
-  /*
    * Get stacks width and height
    */
-  this.getWidthAndHeight = function()
+  this.getFieldOfViewInPixel = function()
   {
-		var width = self.viewWidth;
-		var height = self.viewHeight;
-		var l =
-		{
-			width : width,
-		  height : height
-		};
-		return l;
+    var l =
+	{
+	    stackDivWidth : self.viewWidth,
+		stackDivHeight : self.viewHeight,
+        stackScaledWidth : Math.floor(self.dimension.x * self.scale ),
+        stackScaledHeight : Math.floor(self.dimension.y * self.scale ),
+        worldTop : ( ( self.y - self.viewHeight / self.scale / 2 ) ),
+        worldLeft : ( ( self.x - self.viewWidth / self.scale / 2 ) ),
+        scale : self.scale,
+        worldTopC : self.yc,
+        worldLeftC : self.xc
+    };
+    return l;
   }
   
 	/**
@@ -170,7 +162,7 @@ function Stack(
 	{
 		self.yc = Math.floor( self.y * self.scale - ( self.viewHeight / 2 ) );
 		self.xc = Math.floor( self.x * self.scale - ( self.viewWidth / 2 ) );
-    console.log('xc', self.xc, self.yc)
+
 		for ( var key in layers )
 			layers[ key ].redraw();
 			
@@ -320,7 +312,7 @@ function Stack(
 		if ( layers[ key ] )
 			layers[ key ].unregister();
 		layers[ key ] = layer;
-    self.overviewlayer.refresh();
+        self.overviewlayer.refresh();
 		return;
 	}
 	
@@ -336,7 +328,7 @@ function Stack(
 		{
 			layer.unregister();
 			delete layers[ key ];
-      self.overviewlayer.refresh();
+			self.overviewlayer.refresh();
 			return layer;
 		}
 		else
