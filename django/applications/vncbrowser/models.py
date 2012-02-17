@@ -117,6 +117,11 @@ class Stack(models.Model):
     image_base = models.TextField()
     comment = models.TextField(null=True)
     trakem2_project = models.BooleanField()
+    min_zoom_level = models.IntegerField()
+    file_extension = models.TextField(null=True)
+    tile_width = models.IntegerField()
+    tile_height = models.IntegerField()
+    tile_source_type = models.IntegerField()
 
 class ProjectStack(models.Model):
     class Meta:
@@ -124,6 +129,16 @@ class ProjectStack(models.Model):
         managed = False
     project = models.ForeignKey(Project)
     stack = models.ForeignKey(Stack)
+
+class Overlay(models.Model):
+    class Meta:
+        db_table = "stack"
+        managed = False
+    title = models.TextField()
+    stack_id = models.ForeignKey(Stack)
+    image_base = models.TextField()
+    default_opacity = models.IntegerField()
+    file_extension = models.TextField(null=True)
 
 class Concept(models.Model):
     class Meta:
