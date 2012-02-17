@@ -352,7 +352,8 @@ function handle_openProjectStack( status, text, xml )
 			project.setEditable( e.editable );
 
 			var labelupload = '';
-			if( e.tile_sourcetype === 2 ) {
+
+			if( e.hasOwnProperty('labelupload_url') && e.tile_source_type === 2 ) {
 			    labelupload = e.labelupload_url;
 			}
 
