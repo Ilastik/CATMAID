@@ -315,9 +315,11 @@ function openProjectStack( pid, sid )
 	}
 	ui.catchEvents( "wait" );
 	requestQueue.register(
-		'model/project.stack.php',
+		// was 'model/project.stack.php', // TODO: remove if complete portig of project.stack.php done
+		'dj/' + pid + '/stack/' + sid + '/info',
 		'POST',
-		{ pid : pid, sid : sid },
+		// was { pid : pid, sid : sid },
+		{},
 		handle_openProjectStack );
 	return;
 }
@@ -349,6 +351,11 @@ function handle_openProjectStack( status, text, xml )
 			
 			project.setEditable( e.editable );
 
+			var labelupload = '';
+			if( e.tile_sourcetype === 2 ) {
+			    labelupload = e.labelupload_url;
+			}
+
 			var stack = new Stack(
 					project,
 					e.sid,
@@ -359,7 +366,9 @@ function handle_openProjectStack( status, text, xml )
 					e.broken_slices,
 					e.trakem2_project,
 					e.min_zoom_level,
-					-2 );
+					-2,
+					e.tile_source_type,
+					labelupload); // TODO: if there is any
 			
 			document.getElementById( "toolbox_project" ).style.display = "block";
 			
@@ -369,7 +378,7 @@ function handle_openProjectStack( status, text, xml )
 					e.tile_width,
 					e.tile_height,
 					e.file_extension,
-          e.tile_source_type);
+					e.tile_source_type);
 
 			stack.addLayer( "TileLayer", tilelayer );
 
@@ -380,7 +389,7 @@ function handle_openProjectStack( status, text, xml )
 								e.tile_width,
 								e.tile_height,
 								e.file_extension,
-                e.tile_source_type);
+								e.tile_source_type);
 				// set default opacity internally
 				tilelayer2.setOpacity( value.default_opacity );
 				stack.addLayer( value.title, tilelayer2 );
