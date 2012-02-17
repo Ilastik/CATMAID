@@ -873,7 +873,6 @@ ALTER TABLE ONLY treenode
 		'Data source type specification. See data-model.lyx',
 		'
 ALTER TABLE stack ADD COLUMN tile_source_type integer NOT NULL DEFAULT 1;
-ALTER TABLE overlay ADD COLUMN tile_source_type integer NOT NULL DEFAULT 1;
 '
 ),
 
